@@ -14,6 +14,7 @@ public class ClassList {
     }
 
     public void setList(List<Number> list) {
+        Validator.validateNull(list);
         this.list = list;
     }
 
@@ -23,6 +24,7 @@ public class ClassList {
     }
 
     public ClassList(List<Number> list) {
+        Validator.validateNull(list);
         this.list = list;
         this.result = new ArrayList<>();
     }
@@ -34,7 +36,7 @@ public class ClassList {
     }
 
     public void remove(Number value) {
-        if (list == null || list.isEmpty()) {
+        if (list.isEmpty()) {
             return;
         }
 

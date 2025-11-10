@@ -29,22 +29,14 @@ public class ClassSet {
     }
 
     public ClassSet(File file) {
-        if (file == null) {
-            throw new IllegalArgumentException("Файл не может быть null.");
-        }
+        Validator.valFile(file);
         try {
-            if (!file.exists()) {
-                throw new IllegalArgumentException("Файл не найден.");
-            }
             this.text = Files.readString(file.toPath());
-            if (this.text.trim().isEmpty()) {
-                throw new IllegalArgumentException("Файл пустой.");
-            }
-            this.letters = new TreeSet<>();
-            Text();
         } catch (IOException e) {
-            throw new RuntimeException("Ошибка чтения файла.") ;
+            throw new RuntimeException("Ошибка чтения файла " + file + ".");
         }
+        this.letters = new TreeSet<>();
+        Text();
     }
 
     public String toString() {

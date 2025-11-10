@@ -35,10 +35,56 @@ public class Main {
                     Number val1 = input(list1);
                     ClassList classList1 = new ClassList(list1);
                     classList1.remove(val1);
-                    System.out.println(classList1);
+                    System.out.println(classList1 + "\n");
                     break;
                 }
                 case 4: {
+                    try {
+                        File file1 = new File("ClassMap.txt");
+                        ClassMap classMap1 = new ClassMap(file1);
+                        System.out.println(classMap1 + "\n");
+                    } catch (Exception e) {
+                        System.out.println("Ошибка: " + e.getMessage());
+                    }
+                    try {
+                        File file2 = new File("ClassMapNotVal.txt");
+                        ClassMap classMap2 = new ClassMap(file2);
+                        System.out.println(classMap2 + "\n");
+                    } catch (Exception e) {
+                        System.out.println("Ошибка: " + e.getMessage());
+                    }
+                    try {
+                        File file3 = new File("ClassMapPass.txt");
+                        ClassMap classMap3 = new ClassMap(file3);
+                        System.out.println(classMap3 + "\n");
+                    } catch (Exception e) {
+                        System.out.println("Ошибка: " + e.getMessage());
+                    }
+                    try {
+                        File file4 = null;
+                        ClassMap classMap4 = new ClassMap(file4);
+                    } catch (Exception e) {
+                        System.out.println("Ошибка: " + e.getMessage());
+                    }
+                    try {
+                        File file5 = new File("Map.txt");
+                        ClassMap classMap5 = new ClassMap(file5);
+                    } catch (Exception e) {
+                        System.out.println("Ошибка: " + e.getMessage());
+                    }
+                    try {
+                        File file6 = new File("Empty.txt");
+                        ClassMap classMap6 = new ClassMap(file6);
+                    } catch (Exception e) {
+                        System.out.println("Ошибка: " + e.getMessage());
+                    }
+                    try {
+                        File file7 = new File("D:/IdeaProjects");
+                        ClassMap classMap7 = new ClassMap(file7);
+                    } catch (Exception e) {
+                        System.out.println(e.getMessage());
+                    }
+                    System.out.println();
                     break;
                 }
                 case 5: {
@@ -50,17 +96,30 @@ public class Main {
                         System.out.println("Ошибка: " + e.getMessage());
                     }
                     try {
-                        File file2 = new File("Set.txt");
+                        File file2 = null;
                         ClassSet classSet2 = new ClassSet(file2);
                     } catch (Exception e) {
                         System.out.println("Ошибка: " + e.getMessage());
                     }
                     try {
-                        File file3 = new File("D:/IdeaProjects");
+                        File file3 = new File("Set.txt");
                         ClassSet classSet3 = new ClassSet(file3);
                     } catch (Exception e) {
                         System.out.println("Ошибка: " + e.getMessage());
                     }
+                    try {
+                        File file4 = new File("Empty.txt");
+                        ClassSet classSet4 = new ClassSet(file4);
+                    } catch (Exception e) {
+                        System.out.println("Ошибка: " + e.getMessage());
+                    }
+                    try {
+                        File file5 = new File("D:/IdeaProjects");
+                        ClassSet classSet5 = new ClassSet(file5);
+                    } catch (Exception e) {
+                        System.out.println(e.getMessage());
+                    }
+                    System.out.println();
                     break;
                 }
                 case 6: {
@@ -73,7 +132,7 @@ public class Main {
                     break;
                 }
                 default: {
-                    System.out.println("Некорректный номер задачи.");
+                    System.out.println("Некорректный номер задачи. \n");
                     break;
                 }
             }
@@ -88,6 +147,7 @@ public class Main {
             countStr = scanner.nextLine();
             if (!Validator.valIsInt(countStr) || Integer.parseInt(countStr) <= 0) {
                 System.out.println("Ошибка: введите корректное число.");
+                continue;
             }
             count = Integer.parseInt(countStr);
             break;
@@ -115,6 +175,7 @@ public class Main {
             valStr = scanner.nextLine();
             if (!Validator.valIsNumber(valStr)) {
                 System.out.println("Ошибка: введите корректное число.");
+                continue;
             }
             break;
         }
