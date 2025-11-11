@@ -1,7 +1,7 @@
 import java.util.List;
+import java.util.Map;
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
+import java.util.Queue;
 
 public class Validator {
     public static boolean valIsInt(String value) {
@@ -32,9 +32,21 @@ public class Validator {
         return valIsInt(value) || valIsDouble(value);
     }
 
-    public static <T> void validateNull(List<T> list) {
+    public static <T> void validateNullList(List<T> list) {
         if (list == null) {
             throw new IllegalArgumentException("Список не может быть null.");
+        }
+    }
+
+    public static <T> void validateNullMap(Map<T, T> map) {
+        if (map == null) {
+            throw new IllegalArgumentException("Контейнер не может быть null.");
+        }
+    }
+
+    public static <T> void validateNullQueue(Queue<T> queue) {
+        if (queue == null) {
+            throw new IllegalArgumentException("Очередь не может быть null.");
         }
     }
 
@@ -47,6 +59,27 @@ public class Validator {
         }
         if (file.length() == 0) {
             throw new IllegalArgumentException("Файл " + file + " пустой.");
+        }
+    }
+
+    public static void validateDenominator(int denominator) {
+        if (denominator == 0) {
+            throw new IllegalArgumentException("Знаменатель не может быть равен нулю.");
+        }
+    }
+
+    public static void validateFraction(Fraction fraction) {
+        if (fraction == null) {
+            throw new IllegalArgumentException("Дробь не может быть null");
+        }
+        if (fraction.getNumerator() == 0) {
+            throw new ArithmeticException("Деление на нулевую дробь.");
+        }
+    }
+
+    public static void validateNumber(int number) {
+        if (number == 0) {
+            throw new ArithmeticException("Деление на ноль.");
         }
     }
 

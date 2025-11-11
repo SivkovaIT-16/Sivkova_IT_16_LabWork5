@@ -1,7 +1,7 @@
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 
@@ -18,6 +18,7 @@ public class ClassMap {
     }
 
     public void setInput(Map<String, String> input) {
+        Validator.validateNullMap(input);
         this.input = input;
         this.result = selection(input);
     }
@@ -38,16 +39,13 @@ public class ClassMap {
     public String toString() {
         String str = "";
         if (input.isEmpty()) {
-            return "В файле не найдено строк с корректными данными абитуриента.";
+            return "В файле не найдено строк с корректными данными участников.";
         }
-        if (result.isEmpty()) {
-            return "Нет абитуриентов, не прошедших тестирование.";
-        }
-        str = "Список всех абитуриентов:\n";
+        str = "\nСписок всех участников:\n";
         for (Map.Entry<String, String> applicant : input.entrySet()){
             str += applicant.getKey() + ": " + applicant.getValue() + ";\n" ;
         }
-        str +=  "Список не допущенных до экзамена абитуриентов:\n";
+        str +=  "\nСписок участников, набравших максимальное количество баллов:\n";
         for (Map.Entry<String, String> applicant : result.entrySet()){
             str += applicant.getKey() + ": " + applicant.getValue() + ";\n" ;
         }
@@ -55,40 +53,69 @@ public class ClassMap {
     }
 
     private Map<String, String> readFile(File file) {
-        List<String> lines;
         Map<String, String> dataFile = new HashMap<>();
         try {
-            lines = Files.readAllLines(file.toPath());
+            BufferedReader reader = new BufferedReader(new FileReader(file));
+            String firstLine = reader.readLine();
+            int n;
+            try {
+                n = Integer.parseInt(firstLine.trim());
+            } catch (NumberFormatException e) {
+                System.out.println("Первая строка должна содержать количество участников.");
+                return dataFile;
+            }
+        if (n > 250) {
+            System.out.println("Количество участников превышает 250.");
+            return dataFile;
+        }
+            for (int i = 0; i < n; i++) {
+                String str = reader.readLine();
+                if (str == null) {
+                    System.out.println("Файл содержит меньше строк, чем указано.");
+                    break;
+                }
+                String[] parts = str.split(" ");
+                if (parts.length != 5) {
+                    System.out.println("Cтрока \"" + str + "\" пропущена, т.к. содержит некорректные данные.");
+                    continue;
+                }
+                if (!Validator.valIsNumber(parts[2]) || !Validator.valIsNumber(parts[3]) || !Validator.valIsNumber(parts[4])) {
+                    System.out.println("Cтрока \"" + str + "\" пропущена, т.к. содержит некорректные значения баллов.");
+                    continue;
+                } else if (Integer.parseInt(parts[2]) < 0 || Integer.parseInt(parts[2]) > 25 ||
+                        Integer.parseInt(parts[3]) < 0 || Integer.parseInt(parts[3]) > 25 ||
+                        Integer.parseInt(parts[4]) < 0 || Integer.parseInt(parts[4]) > 25) {
+                    System.out.println("Cтрока \"" + str + "\" пропущена, т.к. содержит некорректные значения баллов.");
+                    continue;
+                }
+                dataFile.put(parts[0] + " " + parts[1], parts[2] + " " + parts[3] + " " + parts[4]);
+            }
         } catch (IOException e) {
             throw new RuntimeException("Ошибка чтения файла " + file + ".");
-        }
-        for (String str : lines) {
-            String[] parts = str.split(" ");
-            if (parts.length != 4) {
-                System.out.println("Cтрока \"" + str + "\" пропущена, т.к. содержит некорректные данные.");
-                continue;
-            }
-            if (!Validator.valIsNumber(parts[2]) || !Validator.valIsNumber(parts[3])) {
-                System.out.println("Cтрока \"" + str + "\" пропущена, т.к. содержит некорректные значения баллов.");
-                continue;
-            } else  if (Integer.parseInt(parts[2]) < 0 || Integer.parseInt(parts[2]) > 100 ||
-                    Integer.parseInt(parts[3]) < 0 || Integer.parseInt(parts[3]) > 100) {
-                System.out.println("Cтрока \"" + str + "\" пропущена, т.к. содержит некорректные значения баллов.");
-                continue;
-            }
-            dataFile.put(parts[0] + " " + parts[1], parts[2] + " " + parts[3]);
         }
         return dataFile;
     }
 
     private Map<String, String> selection(Map<String, String> input) {
         Map<String, String> result = new HashMap<>();
+        int maxScore = 0;
         for (String name : input.keySet()) {
             String scores = input.get(name);
             String[] scoreParts = scores.split(" ");
-            int score1 = Integer.parseInt(scoreParts[0]);
-            int score2 = Integer.parseInt(scoreParts[1]);
-            if (score1 < 30 || score2 < 30) {
+            int score = Integer.parseInt(scoreParts[0]) +
+                    Integer.parseInt(scoreParts[1]) +
+                    Integer.parseInt(scoreParts[2]);
+            if (score > maxScore) {
+                maxScore = score;
+            }
+        }
+        for (String name : input.keySet()) {
+            String scores = input.get(name);
+            String[] scoreParts = scores.split(" ");
+            int score = Integer.parseInt(scoreParts[0]) +
+                    Integer.parseInt(scoreParts[1]) +
+                    Integer.parseInt(scoreParts[2]);
+            if (score == maxScore) {
                 result.put(name, scores);
             }
         }
