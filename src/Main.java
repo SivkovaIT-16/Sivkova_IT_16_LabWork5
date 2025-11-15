@@ -189,31 +189,40 @@ public class Main {
                 }
                 case 5: {
                     try {
+                        System.out.println("Обработка корректного файла:");
                         File file1 = new File("ClassSet.txt");
                         ClassSet classSet1 = new ClassSet(file1);
                         System.out.println(classSet1);
                     } catch (Exception e) {
                         System.out.println("Ошибка: " + e.getMessage());
                     }
+                    System.out.println();
                     try {
+                        System.out.println("Попытка создания объекта с файлом null:");
                         File file2 = null;
                         ClassSet classSet2 = new ClassSet(file2);
                     } catch (Exception e) {
                         System.out.println("Ошибка: " + e.getMessage());
                     }
+                    System.out.println();
                     try {
+                        System.out.println("Попытка создания объекта с несуществующим файлом:");
                         File file3 = new File("Set.txt");
                         ClassSet classSet3 = new ClassSet(file3);
                     } catch (Exception e) {
                         System.out.println("Ошибка: " + e.getMessage());
                     }
+                    System.out.println();
                     try {
+                        System.out.println("Попытка создания объекта с пустым файлом:");
                         File file4 = new File("Empty.txt");
                         ClassSet classSet4 = new ClassSet(file4);
                     } catch (Exception e) {
                         System.out.println("Ошибка: " + e.getMessage());
                     }
+                    System.out.println();
                     try {
+                        System.out.println("Попытка создания объекта с указанием директории:");
                         File file5 = new File("D:/IdeaProjects");
                         ClassSet classSet5 = new ClassSet(file5);
                     } catch (Exception e) {
@@ -243,38 +252,49 @@ public class Main {
                 }
                 case 8: {
                     try {
+                        System.out.println("Обработка файла с корректными и некорректными строками:");
                         File file1 = new File("HumanStream.txt");
                         HumanStream humanStream1 = new HumanStream(file1);
                         System.out.println(humanStream1);
                     } catch (Exception e) {
                         System.out.println("Ошибка: " + e.getMessage());
                     }
+                    System.out.println();
                     try {
+                        System.out.println("Обработка файла с только некорректными строками:");
                         File file2 = new File("HumanStreamNotVal.txt");
                         HumanStream humanStream2 = new HumanStream(file2);
                         System.out.println(humanStream2);
                     } catch (Exception e) {
                         System.out.println("Ошибка: " + e.getMessage());
                     }
+                    System.out.println();
                     try {
+                        System.out.println("Попытка создания объекта с файлом null:");
                         File file3 = null;
                         HumanStream humanStream3 = new HumanStream(file3);
                     } catch (Exception e) {
                         System.out.println("Ошибка: " + e.getMessage());
                     }
+                    System.out.println();
                     try {
+                        System.out.println("Попытка создания объекта с несуществующим файлом:");
                         File file4 = new File("Human.txt");
                         HumanStream humanStream4 = new HumanStream(file4);
                     } catch (Exception e) {
                         System.out.println("Ошибка: " + e.getMessage());
                     }
+                    System.out.println();
                     try {
+                        System.out.println("Попытка создания объекта с пустым файлом:");
                         File file5 = new File("Empty.txt");
                         HumanStream humanStream5 = new HumanStream(file5);
                     } catch (Exception e) {
                         System.out.println("Ошибка: " + e.getMessage());
                     }
+                    System.out.println();
                     try {
+                        System.out.println("Попытка создания объекта с указанием директории:");
                         File file6 = new File("D:/IdeaProjects");
                         HumanStream humanStream6 = new HumanStream(file6);
                     } catch (Exception e) {
