@@ -1,9 +1,15 @@
+package ru.sivkova.fraction;
+
+import ru.sivkova.validator.*;
+
 import java.util.Objects;
 
 public class Fraction implements Fractoions {
     //Поля
     private int numerator;
     private int denominator;
+    private Double cachedDoubleValue;
+    private boolean isCache;
 
     //Свойства
     public int getNumerator() {
@@ -16,10 +22,20 @@ public class Fraction implements Fractoions {
         return denominator;
     }
 
+    public Double getCachedDoubleValue() {
+        return cachedDoubleValue;
+    }
+
+    public boolean isCache() {
+        return isCache;
+    }
+
     @Override
     public void setNumerator(int numerator) {
 
         this.numerator = numerator;
+        this.cachedDoubleValue = null;
+        this.isCache = false;
         simplification();
     }
 
@@ -27,6 +43,8 @@ public class Fraction implements Fractoions {
     public void setDenominator(int denominator) {
         Validator.validateDenominator(denominator);
         this.denominator = denominator;
+        this.cachedDoubleValue = null;
+        this.isCache = false;
         simplification();
     }
 
@@ -35,6 +53,8 @@ public class Fraction implements Fractoions {
     public Fraction() {
         this.numerator = 2;
         this.denominator = 3;
+        this.cachedDoubleValue = null;
+        this.isCache = false;
     }
 
     //С параметрами
@@ -42,6 +62,8 @@ public class Fraction implements Fractoions {
         Validator.validateDenominator(denominator);
         this.numerator = numerator;
         this.denominator = denominator;
+        this.cachedDoubleValue = null;
+        this.isCache = false;
         simplification();
     }
 
@@ -49,11 +71,22 @@ public class Fraction implements Fractoions {
     public Fraction(Fraction fraction) {
         this.numerator = fraction.numerator;
         this.denominator = fraction.denominator;
+        this.cachedDoubleValue = fraction.cachedDoubleValue;
+        this.isCache = fraction.isCache;
     }
 
     @Override
     public String toString() {
         return numerator + "/" + denominator;
+    }
+
+    @Override
+    public double getDoubleFraction() {
+        if (!isCache || cachedDoubleValue == null) {
+            cachedDoubleValue = (double) numerator / (double) denominator;
+            isCache = true;
+        }
+        return cachedDoubleValue;
     }
 
     //Арифметические операции
@@ -128,11 +161,6 @@ public class Fraction implements Fractoions {
     @Override
     public int hashCode() {
         return Objects.hash(numerator, denominator);
-    }
-
-    @Override
-    public double getDoubleFraction() {
-        return (double) numerator / (double) denominator;
     }
 
     //Упрощение дроби

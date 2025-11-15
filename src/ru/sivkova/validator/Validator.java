@@ -1,3 +1,7 @@
+package ru.sivkova.validator;
+
+import ru.sivkova.fraction.*;
+
 import java.util.List;
 import java.util.Map;
 import java.io.File;
@@ -81,6 +85,7 @@ public class Validator {
         if (number == 0) {
             throw new ArithmeticException("Деление на ноль.");
         }
+
     }
 
 }

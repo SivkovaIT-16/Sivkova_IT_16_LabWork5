@@ -1,3 +1,7 @@
+import ru.sivkova.cat.*;
+import ru.sivkova.fraction.*;
+import ru.sivkova.validator.*;
+
 import java.io.File;
 import java.util.*;
 
@@ -9,13 +13,14 @@ public class Main {
         do {
             System.out.println("Введите номер задачи:\n" +
                     "0.Завершить программу.\n" +
-                    "1.Обобщённая коробка.\n" +
-                    "2.Сравнимое.\n" +
+                    "1.Кэшировать дробь.\n" +
+                    "2.Кот мяукает.\n" +
                     "3.Список.\n" +
                     "4.Мап.\n" +
                     "5.Сет.\n" +
                     "6.Очередь.\n" +
-                    "7.Коллекционирование.");
+                    "7.Собрать точки в ломанную.\n" +
+                    "8.Сгруппировать людей.");
             n = scanner.nextInt();
             scanner.nextLine();
             switch (n) {
@@ -23,9 +28,69 @@ public class Main {
                     System.out.println("Программа завершена.");
                     break;
                 case 1: {
+                    Fraction frac1 = new Fraction(1, 3);
+                    Fraction frac2 = new Fraction(2, 4);
+                    Fraction frac3 = new Fraction(3, -6);
+
+                    System.out.println("Дробь 1: " + frac1);
+                    System.out.println("Дробь 2: " + frac2);
+                    System.out.println("Дробь 3: " + frac3);
+                    System.out.println();
+
+                    System.out.println("Первое вычисление вещественного значения дроби 1: " + frac1.getDoubleFraction());
+                    System.out.println("Второе вычисление вещественного значения дроби 1: " + frac1.getDoubleFraction() + " (из кэша)");
+                    System.out.println();
+
+                    Fraction frac4 = new Fraction(2, 4);
+                    Fraction frac5 = new Fraction(1, 2);
+                    System.out.println("Сравнение: " +frac4 + " и " + frac5 + " = " + frac4.equals(frac5));
+                    System.out.println("Хэш-код " + frac4 + " : " + frac4.hashCode());
+                    System.out.println("Хэш-код " + frac5 + " : " + frac5.hashCode());
+                    System.out.println();
+                    System.out.println("Сравнение: " + frac1 + " и " + frac2 + " = " + frac1.equals(frac2));
+                    System.out.println("Хэш-код " + frac1 + " : " + frac1.hashCode());
+                    System.out.println("Хэш-код " + frac2 + " : " + frac2.hashCode());
+                    System.out.println();
                     break;
                 }
                 case 2: {
+                    CountMeowCat countMeowCat = null;
+                    System.out.println("Создайте кота.");
+                    while(true) {
+                        System.out.print("Введите имя кота: ");
+                        String name = scanner.nextLine().trim();
+                        if (name.isEmpty()) {
+                            System.out.println("Ошибка: введите корректное имя кота");
+                            continue;
+                        }
+                        Cat cat = new Cat(name);
+                        countMeowCat = new CountMeowCat(cat);
+                        System.out.println(cat + " создан.");
+                        break;
+                    }
+                    int m;
+                    do {
+                        System.out.println("Выберете действие:\n" +
+                                "0.Завершить программу.\n" +
+                                "1.Вызвать мяуканье.\n" +
+                                "2.Сколько раз кот мяукал?");
+                        m = scanner.nextInt();
+                        scanner.nextLine();
+                        switch (m) {
+                            case 0:
+                                System.out.println("Программа \"Кот мяукает\" завершена.");
+                                break;
+                            case 1:
+                                countMeowCat.meow();
+                                break;
+                            case 2:
+                                System.out.println(countMeowCat);
+                                break;
+                            default:
+                                System.out.println("Некорректный номер действия.\n");
+                                break;
+                        }
+                    } while (m != 0);
                     break;
                 }
                 case 3: {
@@ -38,63 +103,82 @@ public class Main {
                 }
                 case 4: {
                     try {
+                        System.out.println("Обработка файла с корректными и некорректными строками (один участник с максимальным баллом):");
                         File file1 = new File("ClassMapOneMax.txt");
                         ClassMap classMap1 = new ClassMap(file1);
                         System.out.println(classMap1);
                     } catch (Exception e) {
                         System.out.println("Ошибка: " + e.getMessage());
                     }
+                    System.out.println();
                     try {
+                        System.out.println("Обработка файла с только некорректными строками:");
                         File file2 = new File("ClassMapNotVal.txt");
                         ClassMap classMap2 = new ClassMap(file2);
                         System.out.println(classMap2);
                     } catch (Exception e) {
                         System.out.println("Ошибка: " + e.getMessage());
                     }
+                    System.out.println();
                     try {
+                        System.out.println("Обработка файла с только корректными строками (несколько участников с максимальным баллом):");
                         File file3 = new File("ClassMapManyMax.txt");
                         ClassMap classMap3 = new ClassMap(file3);
                         System.out.println(classMap3);
                     } catch (Exception e) {
                         System.out.println("Ошибка: " + e.getMessage());
                     }
+                    System.out.println();
                     try {
+                        System.out.println("Обработка некорректного файла (первая строка не содержит количество участников):");
                         File file4 = new File("ClassSet.txt");
                         ClassMap classMap4 = new ClassMap(file4);
                     } catch (Exception e) {
                         System.out.println("Ошибка: " + e.getMessage());
                     }
+                    System.out.println();
                     try {
+                        System.out.println("Обработка некорректного файла (содержит меньше участников, чем указано в первой строке):");
                         File file5 = new File("ClassMapFewStr.txt");
                         ClassMap classMap5 = new ClassMap(file5);
                     } catch (Exception e) {
                         System.out.println("Ошибка: " + e.getMessage());
                     }
+                    System.out.println();
                     try {
+                        System.out.println("Обработка некорректного файла (первая строка содержит количество участников более 250):");
                         File file6 = new File("ClassMapManyStr.txt");
                         ClassMap classMap6 = new ClassMap(file6);
                     } catch (Exception e) {
                         System.out.println("Ошибка: " + e.getMessage());
                     }
+                    System.out.println();
                     try {
+                        System.out.println("Попытка создания объекта с файлом null:");
                         File file7 = null;
                         ClassMap classMap7 = new ClassMap(file7);
                     } catch (Exception e) {
                         System.out.println("Ошибка: " + e.getMessage());
                     }
+                    System.out.println();
                     try {
+                        System.out.println("Попытка создания объекта с несуществующим файлом:");
                         File file8 = new File("Map.txt");
                         ClassMap classMap8 = new ClassMap(file8);
                     } catch (Exception e) {
                         System.out.println("Ошибка: " + e.getMessage());
                     }
+                    System.out.println();
                     try {
+                        System.out.println("Попытка создания объекта с пустым файлом:");
                         File file9 = new File("Empty.txt");
                         ClassMap classMap9 = new ClassMap(file9);
                     } catch (Exception e) {
                         System.out.println("Ошибка: " + e.getMessage());
                     }
+                    System.out.println();
                     try {
+                        System.out.println("Попытка создания объекта с указанием директории:");
                         File file10= new File("D:/IdeaProjects");
                         ClassMap classMap10 = new ClassMap(file10);
                     } catch (Exception e) {
@@ -158,6 +242,45 @@ public class Main {
                     break;
                 }
                 case 8: {
+                    try {
+                        File file1 = new File("HumanStream.txt");
+                        HumanStream humanStream1 = new HumanStream(file1);
+                        System.out.println(humanStream1);
+                    } catch (Exception e) {
+                        System.out.println("Ошибка: " + e.getMessage());
+                    }
+                    try {
+                        File file2 = new File("HumanStreamNotVal.txt");
+                        HumanStream humanStream2 = new HumanStream(file2);
+                        System.out.println(humanStream2);
+                    } catch (Exception e) {
+                        System.out.println("Ошибка: " + e.getMessage());
+                    }
+                    try {
+                        File file3 = null;
+                        HumanStream humanStream3 = new HumanStream(file3);
+                    } catch (Exception e) {
+                        System.out.println("Ошибка: " + e.getMessage());
+                    }
+                    try {
+                        File file4 = new File("Human.txt");
+                        HumanStream humanStream4 = new HumanStream(file4);
+                    } catch (Exception e) {
+                        System.out.println("Ошибка: " + e.getMessage());
+                    }
+                    try {
+                        File file5 = new File("Empty.txt");
+                        HumanStream humanStream5 = new HumanStream(file5);
+                    } catch (Exception e) {
+                        System.out.println("Ошибка: " + e.getMessage());
+                    }
+                    try {
+                        File file6 = new File("D:/IdeaProjects");
+                        HumanStream humanStream6 = new HumanStream(file6);
+                    } catch (Exception e) {
+                        System.out.println(e.getMessage());
+                    }
+                    System.out.println();
                     break;
                 }
                 default: {
