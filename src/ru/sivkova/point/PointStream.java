@@ -38,9 +38,9 @@ public class PointStream {
     }
     private Polyline collectPolyline(List<Point> points) {
         List<Point> pointStream = points.stream()
-                .distinct()
                 .sorted(Comparator.comparingDouble(Point::getX))
                 .map(PointStream::mapY)
+                .distinct()
                 .collect(Collectors.toList());
         return new Polyline(pointStream);
     }

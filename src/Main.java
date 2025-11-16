@@ -1,6 +1,7 @@
 import ru.sivkova.cat.*;
 import ru.sivkova.fraction.*;
 import ru.sivkova.validator.*;
+import ru.sivkova.point.*;
 
 import java.io.File;
 import java.util.*;
@@ -248,6 +249,9 @@ public class Main {
                     break;
                 }
                 case 7: {
+                    List<Point> points = inputPoint();
+                    PointStream pointStream = new PointStream(points);
+                    System.out.println(pointStream);
                     break;
                 }
                 case 8: {
@@ -259,7 +263,6 @@ public class Main {
                     } catch (Exception e) {
                         System.out.println("Ошибка: " + e.getMessage());
                     }
-                    System.out.println();
                     try {
                         System.out.println("Обработка файла с только некорректными строками:");
                         File file2 = new File("HumanStreamNotVal.txt");
@@ -418,5 +421,52 @@ public class Main {
             break;
         }
         return index;
+    }
+
+    private static List<Point>  inputPoint() {
+        List<Point> points = new ArrayList<>();
+        int count;
+        while (true) {
+            System.out.print("Введите количество точек: ");
+            String countStr = scanner.nextLine();
+            if (!Validator.valIsInt(countStr) || Integer.parseInt(countStr) < 0) {
+                System.out.println("Ошибка: введите целое неотрицательное число.");
+                continue;
+            }
+            count = Integer.parseInt(countStr);
+            break;
+        }
+        if (count == 0) {
+            return points;
+        }
+        for (int i = 0; i < count; i++) {
+            System.out.println("Ввод координат " + (i + 1) + " точки.");
+            double x, y;
+            while (true) {
+                System.out.print("Введите координату X: ");
+                String xStr = scanner.nextLine();
+                if (!Validator.valIsDouble(xStr)) {
+                    System.out.println("Ошибка: введите корректное значение координаты X.");
+                    continue;
+                }
+                x = Double.parseDouble(xStr);
+                break;
+            }
+            while (true) {
+                System.out.print("Введите координату Y: ");
+                String yStr = scanner.nextLine();
+                if (!Validator.valIsDouble(yStr)) {
+                    System.out.println("Ошибка: введите корректное значение координаты Y.");
+                    continue;
+                }
+                y = Double.parseDouble(yStr);
+                break;
+            }
+            Point point = new Point(x,y);
+            points.add(point);
+            System.out.println("Точка " + point.toString() + " добавлена.");
+            System.out.println();
+        }
+        return points;
     }
 }

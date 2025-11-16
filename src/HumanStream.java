@@ -20,6 +20,7 @@ public class HumanStream {
     }
 
     public void setFile(File file) {
+        Validator.valFile(file);
         this.file = file;
         this.humansStream = collectionHuman(file);
     }

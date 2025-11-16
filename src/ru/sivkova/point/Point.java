@@ -3,26 +3,26 @@ package ru.sivkova.point;
 import java.util.Objects;
 
 public class Point {
-    private Double x;
-    private Double y;
+    private double x;
+    private double y;
 
-    public Double getX() {
+    public double getX() {
         return x;
     }
 
-    public Double getY() {
+    public double getY() {
         return y;
     }
 
-    public void setX(Double x) {
+    public void setX(double x) {
         this.x = x;
     }
 
-    public void setY(Double y) {
+    public void setY(double y) {
         this.y = y;
     }
 
-    public Point(Double x, Double y) {
+    public Point(double x, double y) {
         this.x = x;
         this.y = y;
     }
@@ -44,9 +44,8 @@ public class Point {
             return false;
         }
         Point point = (Point) object;
-        if (this.x == point.x && this.y == point.y)
-            return true;
-        return false;
+        return Objects.equals(this.x, point.x) &&
+                Objects.equals(this.y, point.y);
     }
 
     @Override

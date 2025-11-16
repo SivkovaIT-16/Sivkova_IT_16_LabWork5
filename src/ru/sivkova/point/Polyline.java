@@ -34,10 +34,14 @@ public class Polyline {
 
     @Override
     public String toString() {
-        String result = "Линия [ ";
+        if (points.isEmpty()) {
+            return "Список точек пустой. Невозможно создать линию.";
+        }
+        String result = "Линия [";
         for (Point point : points) {
             result += point.toString() + ", ";
         }
+        result = result.substring(0, result.length() - 2) + "]";
         return result;
     }
 }
