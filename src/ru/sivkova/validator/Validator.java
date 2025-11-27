@@ -42,11 +42,6 @@ public class Validator {
         }
     }
 
-    public static <T> void validateNullMap(Map<T, T> map) {
-        if (map == null) {
-            throw new IllegalArgumentException("Контейнер не может быть null.");
-        }
-    }
 
     public static <T> void validateNullQueue(Queue<T> queue) {
         if (queue == null) {
@@ -72,10 +67,12 @@ public class Validator {
         }
     }
 
-    public static void validateFraction(Fraction fraction) {
+    public static void validateFractionNull(Fraction fraction) {
         if (fraction == null) {
             throw new IllegalArgumentException("Дробь не может быть null");
         }
+    }
+    public static void validateFraction(Fraction fraction) {
         if (fraction.getNumerator() == 0) {
             throw new ArithmeticException("Деление на нулевую дробь.");
         }

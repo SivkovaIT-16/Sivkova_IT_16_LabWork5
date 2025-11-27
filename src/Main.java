@@ -4,6 +4,7 @@ import ru.sivkova.validator.*;
 import ru.sivkova.point.*;
 
 import java.io.File;
+import java.sql.SQLOutput;
 import java.util.*;
 
 public class Main {
@@ -29,24 +30,28 @@ public class Main {
                     System.out.println("Программа завершена.");
                     break;
                 case 1: {
-                    Fraction frac1 = new Fraction(1, 3);
-                    Fraction frac2 = new Fraction(2, 4);
-                    Fraction frac3 = new Fraction(3, -6);
+                    Fraction frac1 = new Fraction(3, -6);
 
                     System.out.println("Дробь 1: " + frac1);
-                    System.out.println("Дробь 2: " + frac2);
-                    System.out.println("Дробь 3: " + frac3);
                     System.out.println();
 
-                    System.out.println("Первое вычисление вещественного значения дроби 1: " + frac1.getDoubleFraction());
-                    System.out.println("Второе вычисление вещественного значения дроби 1: " + frac1.getDoubleFraction() + " (из кэша)");
+                    FractionCache fracCache1 = new FractionCache(frac1);
+                    System.out.println("Вычисление и кэширование вещественного значения дроби 1: " + fracCache1.getDoubleFraction());
+                    System.out.println("Повторный вызов нахождения вещественного значения (не считаем заново, берём из кэша): " + fracCache1.getDoubleFraction());
+
+                    System.out.println("Изменяем значение дроби 1.");
+                    fracCache1.setFraction(77, 2);
+                    System.out.println("Дробь 1: " + fracCache1);
                     System.out.println();
 
-                    Fraction frac4 = new Fraction(2, 4);
-                    Fraction frac5 = new Fraction(1, 2);
-                    System.out.println("Сравнение: " +frac4 + " и " + frac5 + " = " + frac4.equals(frac5));
-                    System.out.println("Хэш-код " + frac4 + " : " + frac4.hashCode());
-                    System.out.println("Хэш-код " + frac5 + " : " + frac5.hashCode());
+                    System.out.print("Вещественное значение в кэше пересчитано: " + fracCache1.getDoubleFraction());
+                    System.out.println();
+
+                    Fraction frac2 = new Fraction(3, 5);
+                    Fraction frac3 = new Fraction(75, 125);
+                    System.out.println("Сравнение: " + frac2 + " и " + frac3 + " = " + frac2.equals(frac3));
+                    System.out.println("Хэш-код " + frac2 + " : " + frac2.hashCode());
+                    System.out.println("Хэш-код " + frac3 + " : " + frac3.hashCode());
                     System.out.println();
                     System.out.println("Сравнение: " + frac1 + " и " + frac2 + " = " + frac1.equals(frac2));
                     System.out.println("Хэш-код " + frac1 + " : " + frac1.hashCode());
@@ -95,19 +100,54 @@ public class Main {
                     break;
                 }
                 case 3: {
-                    List<Number> list1 = new ArrayList<>();
-                    Number val1 = inputList(list1);
-                    ClassList classList1 = new ClassList(list1);
-                    classList1.remove(val1);
-                    System.out.println(classList1 + "\n");
+                    int m;
+                    do {
+                        System.out.println("Выберете действие:\n" +
+                                "0.Завершить программу.\n" +
+                                "1.Работа со списком чисел.\n" +
+                                "2.Работа со списком строк.");
+                        m = scanner.nextInt();
+                        scanner.nextLine();
+                        switch (m) {
+                            case 0:
+                                System.out.println("Программа \"Список\" завершена.");
+                                break;
+                            case 1:
+                                try {
+                                    List<Number> list1 = new ArrayList<>();
+                                    Number val1 = inputListNumber(list1);
+                                    List<Number> result1 = Methods.removeAll(list1, val1);
+                                    System.out.println("Исходный список: " + list1);
+                                    System.out.println("Удаляем элемент: " + val1);
+                                    System.out.println("Результат удаления: " + result1 + "\n");
+                                } catch (Exception e) {
+                                    System.out.println("Ошибка: " + e.getMessage());
+                                }
+                                break;
+                            case 2:
+                                try {
+                                List<String> list2 = new ArrayList<>();
+                                String val2 = inputListString(list2);
+                                List<String> result2 = Methods.removeAll(list2, val2);
+                                System.out.println("Исходный список: " + list2);
+                                System.out.println("Удаляем элемент: " + val2);
+                                System.out.println("Результат удаления: " + result2 + "\n");
+                                } catch (Exception e) {
+                                    System.out.println("Ошибка: " + e.getMessage());
+                                }
+                                break;
+                            default:
+                                System.out.println("Некорректный номер действия.\n");
+                                break;
+                        }
+                    } while (m != 0);
                     break;
                 }
                 case 4: {
                     try {
                         System.out.println("Обработка файла с корректными и некорректными строками (один участник с максимальным баллом):");
                         File file1 = new File("ClassMapOneMax.txt");
-                        ClassMap classMap1 = new ClassMap(file1);
-                        System.out.println(classMap1);
+                        Methods.findParticipants(file1);
                     } catch (Exception e) {
                         System.out.println("Ошибка: " + e.getMessage());
                     }
@@ -115,8 +155,7 @@ public class Main {
                     try {
                         System.out.println("Обработка файла с только некорректными строками:");
                         File file2 = new File("ClassMapNotVal.txt");
-                        ClassMap classMap2 = new ClassMap(file2);
-                        System.out.println(classMap2);
+                        Methods.findParticipants(file2);
                     } catch (Exception e) {
                         System.out.println("Ошибка: " + e.getMessage());
                     }
@@ -124,8 +163,7 @@ public class Main {
                     try {
                         System.out.println("Обработка файла с только корректными строками (несколько участников с максимальным баллом):");
                         File file3 = new File("ClassMapManyMax.txt");
-                        ClassMap classMap3 = new ClassMap(file3);
-                        System.out.println(classMap3);
+                        Methods.findParticipants(file3);
                     } catch (Exception e) {
                         System.out.println("Ошибка: " + e.getMessage());
                     }
@@ -133,7 +171,7 @@ public class Main {
                     try {
                         System.out.println("Обработка некорректного файла (первая строка не содержит количество участников):");
                         File file4 = new File("ClassSet.txt");
-                        ClassMap classMap4 = new ClassMap(file4);
+                        Methods.findParticipants(file4);
                     } catch (Exception e) {
                         System.out.println("Ошибка: " + e.getMessage());
                     }
@@ -141,7 +179,7 @@ public class Main {
                     try {
                         System.out.println("Обработка некорректного файла (содержит меньше участников, чем указано в первой строке):");
                         File file5 = new File("ClassMapFewStr.txt");
-                        ClassMap classMap5 = new ClassMap(file5);
+                        Methods.findParticipants(file5);
                     } catch (Exception e) {
                         System.out.println("Ошибка: " + e.getMessage());
                     }
@@ -149,7 +187,7 @@ public class Main {
                     try {
                         System.out.println("Обработка некорректного файла (первая строка содержит количество участников более 250):");
                         File file6 = new File("ClassMapManyStr.txt");
-                        ClassMap classMap6 = new ClassMap(file6);
+                        Methods.findParticipants(file6);
                     } catch (Exception e) {
                         System.out.println("Ошибка: " + e.getMessage());
                     }
@@ -157,7 +195,7 @@ public class Main {
                     try {
                         System.out.println("Попытка создания объекта с файлом null:");
                         File file7 = null;
-                        ClassMap classMap7 = new ClassMap(file7);
+                        Methods.findParticipants(file7);
                     } catch (Exception e) {
                         System.out.println("Ошибка: " + e.getMessage());
                     }
@@ -165,7 +203,7 @@ public class Main {
                     try {
                         System.out.println("Попытка создания объекта с несуществующим файлом:");
                         File file8 = new File("Map.txt");
-                        ClassMap classMap8 = new ClassMap(file8);
+                        Methods.findParticipants(file8);
                     } catch (Exception e) {
                         System.out.println("Ошибка: " + e.getMessage());
                     }
@@ -173,7 +211,7 @@ public class Main {
                     try {
                         System.out.println("Попытка создания объекта с пустым файлом:");
                         File file9 = new File("Empty.txt");
-                        ClassMap classMap9 = new ClassMap(file9);
+                        Methods.findParticipants(file9);
                     } catch (Exception e) {
                         System.out.println("Ошибка: " + e.getMessage());
                     }
@@ -181,7 +219,7 @@ public class Main {
                     try {
                         System.out.println("Попытка создания объекта с указанием директории:");
                         File file10= new File("D:/IdeaProjects");
-                        ClassMap classMap10 = new ClassMap(file10);
+                        Methods.findParticipants(file10);
                     } catch (Exception e) {
                         System.out.println(e.getMessage());
                     }
@@ -192,40 +230,47 @@ public class Main {
                     try {
                         System.out.println("Обработка корректного файла:");
                         File file1 = new File("ClassSet.txt");
-                        ClassSet classSet1 = new ClassSet(file1);
-                        System.out.println(classSet1);
+                        Methods.findUniqueLetters(file1);
+                    } catch (Exception e) {
+                        System.out.println("Ошибка: " + e.getMessage());
+                    }
+                    System.out.println();
+                    try {
+                        System.out.println("Обработка файла, содержащего только гласные:");
+                        File file2 = new File("ClassSetVowel.txt");
+                        Methods.findUniqueLetters(file2);
                     } catch (Exception e) {
                         System.out.println("Ошибка: " + e.getMessage());
                     }
                     System.out.println();
                     try {
                         System.out.println("Попытка создания объекта с файлом null:");
-                        File file2 = null;
-                        ClassSet classSet2 = new ClassSet(file2);
+                        File file3 = null;
+                        Methods.findUniqueLetters(file3);
                     } catch (Exception e) {
                         System.out.println("Ошибка: " + e.getMessage());
                     }
                     System.out.println();
                     try {
                         System.out.println("Попытка создания объекта с несуществующим файлом:");
-                        File file3 = new File("Set.txt");
-                        ClassSet classSet3 = new ClassSet(file3);
+                        File file4 = new File("Set.txt");
+                        Methods.findUniqueLetters(file4);
                     } catch (Exception e) {
                         System.out.println("Ошибка: " + e.getMessage());
                     }
                     System.out.println();
                     try {
                         System.out.println("Попытка создания объекта с пустым файлом:");
-                        File file4 = new File("Empty.txt");
-                        ClassSet classSet4 = new ClassSet(file4);
+                        File file5 = new File("Empty.txt");
+                        Methods.findUniqueLetters(file5);
                     } catch (Exception e) {
                         System.out.println("Ошибка: " + e.getMessage());
                     }
                     System.out.println();
                     try {
                         System.out.println("Попытка создания объекта с указанием директории:");
-                        File file5 = new File("D:/IdeaProjects");
-                        ClassSet classSet5 = new ClassSet(file5);
+                        File file6 = new File("D:/IdeaProjects");
+                        Methods.findUniqueLetters(file6);
                     } catch (Exception e) {
                         System.out.println(e.getMessage());
                     }
@@ -233,19 +278,49 @@ public class Main {
                     break;
                 }
                 case 6: {
-                    Queue<Number> queue = new LinkedList<>();
-                    inputQueue(queue);
-                    ClassQueue queue1 = new ClassQueue(queue);
-                    System.out.print("Введите начальный индекс i: ");
-                    int i = inputIndex() - 1;
-                    System.out.print("Введите конечный индекс j: ");
-                    int j = inputIndex() - 1;
-                    try {
-                        queue1.equality(i, j);
-                        System.out.println(queue1);
-                    } catch (IllegalArgumentException e) {
-                        System.out.println("Ошибка: " + e.getMessage());
-                    }
+                    int m;
+                    do {
+                        System.out.println("Выберете действие:\n" +
+                                "0.Завершить программу.\n" +
+                                "1.Работа с очередью чисел.\n" +
+                                "2.Работа с очередью строк.");
+                        m = scanner.nextInt();
+                        scanner.nextLine();
+                        switch (m) {
+                            case 0:
+                                System.out.println("Программа \"Очередь\" завершена.");
+                                break;
+                            case 1:
+                                Queue<Number> queue1 = new LinkedList<>();
+                                inputQueueNumber(queue1);
+                                System.out.print("Введите начальный индекс i: ");
+                                int iNum = inputIndex() - 1;
+                                System.out.print("Введите конечный индекс j: ");
+                                int jNum = inputIndex() - 1;
+                                try {
+                                    Methods.equality(queue1, iNum, jNum);
+                                } catch (IllegalArgumentException e) {
+                                    System.out.println("Ошибка: " + e.getMessage());
+                                }
+                                break;
+                            case 2:
+                                Queue<String> queue2 = new LinkedList<>();
+                                inputQueueString(queue2);
+                                System.out.print("Введите начальный индекс i: ");
+                                int iStr = inputIndex() - 1;
+                                System.out.print("Введите конечный индекс j: ");
+                                int jStr = inputIndex() - 1;
+                                try {
+                                    Methods.equality(queue2, iStr, jStr);
+                                } catch (IllegalArgumentException e) {
+                                    System.out.println("Ошибка: " + e.getMessage());
+                                }
+                                break;
+                            default:
+                                System.out.println("Некорректный номер действия.\n");
+                                break;
+                        }
+                    } while (m != 0);
                     break;
                 }
                 case 7: {
@@ -314,7 +389,7 @@ public class Main {
         } while (n != 0);
     }
 
-    private static Number inputList(List<Number> list) {
+    private static Number inputListNumber(List<Number> list) {
         String countStr;
         int count;
         while (true) {
@@ -357,7 +432,46 @@ public class Main {
         return Double.parseDouble(valStr);
     }
 
-    private static void inputQueue(Queue<Number> queue) {
+    private static String inputListString(List<String> list) {
+        String countStr;
+        int count;
+        while (true) {
+            System.out.print("Введите количество строк в списке: ");
+            countStr = scanner.nextLine();
+            if (!Validator.valIsInt(countStr) || Integer.parseInt(countStr) < 0) {
+                System.out.println("Ошибка: введите корректное число.");
+                continue;
+            }
+            count = Integer.parseInt(countStr);
+            break;
+        }
+        for (int i = 0; i < count; i++) {
+            String str;
+            while (true) {
+                System.out.print("Введите " + (i + 1) + " строку списка: ");
+                str = scanner.nextLine();
+                if (str.isEmpty()) {
+                    System.out.println("Ошибка: введена пустая строка. Повторите попытку.");
+                    continue;
+                }
+                list.add(str);
+                break;
+            }
+        }
+        String valStr;
+        while (true) {
+            System.out.print("Введите строку, которую хотите удалить: ");
+            valStr = scanner.nextLine();
+            if (valStr.isEmpty()) {
+                System.out.println("Ошибка: введена пустая строка. Повторите попытку.");
+                continue;
+            }
+            break;
+        }
+        return valStr;
+    }
+
+    private static void inputQueueNumber(Queue<Number> queue) {
         String countStr;
         int count;
         while (true) {
@@ -388,24 +502,32 @@ public class Main {
             }
         }
     }
-
-    private static Number inputElement () {
-        String numberStr;
-        Number number;
+    private static void inputQueueString(Queue<String> queue) {
+        String countStr;
+        int count;
         while (true) {
-            System.out.print("Введите элемент, который хотите добавить: ");
-             numberStr= scanner.nextLine();
-            if (!Validator.valIsNumber(numberStr)) {
+            System.out.print("Введите количество элементов в очереди: ");
+            countStr = scanner.nextLine();
+            if (!Validator.valIsInt(countStr) || Integer.parseInt(countStr) < 0) {
                 System.out.println("Ошибка: введите корректное число.");
                 continue;
             }
-            if (Validator.valIsInt(numberStr)) {
-                number = Integer.parseInt(numberStr);
-            }
-            number = Double.parseDouble(numberStr);
+            count = Integer.parseInt(countStr);
             break;
         }
-        return number;
+        for (int i = 0; i < count; i++) {
+            String str;
+            while (true) {
+                System.out.print("Введите " + (i + 1) + " элемент очереди: ");
+                str = scanner.nextLine();
+                if (str.isEmpty()) {
+                    System.out.println("Ошибка: введена пустая строка. Повторите попытку.");
+                    continue;
+                }
+                queue.add(str);
+                break;
+            }
+        }
     }
 
     private static Integer inputIndex () {

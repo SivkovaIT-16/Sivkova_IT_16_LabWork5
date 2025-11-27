@@ -4,12 +4,10 @@ import ru.sivkova.validator.*;
 
 import java.util.Objects;
 
-public class Fraction implements Fractoions {
+public class Fraction implements Fractions {
     //Поля
     private int numerator;
     private int denominator;
-    private Double cachedDoubleValue;
-    private boolean isCache;
 
     //Свойства
     public int getNumerator() {
@@ -22,29 +20,11 @@ public class Fraction implements Fractoions {
         return denominator;
     }
 
-    public Double getCachedDoubleValue() {
-        return cachedDoubleValue;
-    }
-
-    public boolean isCache() {
-        return isCache;
-    }
-
     @Override
-    public void setNumerator(int numerator) {
-
-        this.numerator = numerator;
-        this.cachedDoubleValue = null;
-        this.isCache = false;
-        simplification();
-    }
-
-    @Override
-    public void setDenominator(int denominator) {
+    public void setFraction(int numerator, int denominator) {
         Validator.validateDenominator(denominator);
+        this.numerator = numerator;
         this.denominator = denominator;
-        this.cachedDoubleValue = null;
-        this.isCache = false;
         simplification();
     }
 
@@ -53,8 +33,6 @@ public class Fraction implements Fractoions {
     public Fraction() {
         this.numerator = 2;
         this.denominator = 3;
-        this.cachedDoubleValue = null;
-        this.isCache = false;
     }
 
     //С параметрами
@@ -62,17 +40,14 @@ public class Fraction implements Fractoions {
         Validator.validateDenominator(denominator);
         this.numerator = numerator;
         this.denominator = denominator;
-        this.cachedDoubleValue = null;
-        this.isCache = false;
         simplification();
     }
 
     //Копирования
     public Fraction(Fraction fraction) {
+        Validator.validateFractionNull(fraction);
         this.numerator = fraction.numerator;
         this.denominator = fraction.denominator;
-        this.cachedDoubleValue = fraction.cachedDoubleValue;
-        this.isCache = fraction.isCache;
     }
 
     @Override
@@ -82,16 +57,13 @@ public class Fraction implements Fractoions {
 
     @Override
     public double getDoubleFraction() {
-        if (!isCache || cachedDoubleValue == null) {
-            cachedDoubleValue = (double) numerator / (double) denominator;
-            isCache = true;
-        }
-        return cachedDoubleValue;
+        return (double) numerator / denominator;
     }
 
     //Арифметические операции
     //Сумма дробей
     public Fraction sum(Fraction fraction) {
+        Validator.validateFractionNull(fraction);
         int newNumerator = this.numerator * fraction.denominator + fraction.numerator * this.denominator;
         int newDenominator = this.denominator * fraction.denominator;
         return new Fraction(newNumerator, newDenominator);
@@ -104,6 +76,7 @@ public class Fraction implements Fractoions {
 
     //Разность дробей
     public Fraction difference(Fraction fraction) {
+        Validator.validateFractionNull(fraction);
         int newNumerator = this.numerator * fraction.denominator - fraction.numerator * this.denominator;
         int newDenominator = this.denominator * fraction.denominator;
         return new Fraction(newNumerator, newDenominator);
@@ -116,6 +89,7 @@ public class Fraction implements Fractoions {
 
     //Произведение дробей
     public Fraction composition(Fraction fraction) {
+        Validator.validateFractionNull(fraction);
         int newNumerator = this.numerator * fraction.numerator;
         int newDenominator = this.denominator * fraction.denominator;
         return new Fraction(newNumerator, newDenominator);
@@ -128,6 +102,7 @@ public class Fraction implements Fractoions {
 
     //Деление дробей
     public Fraction division(Fraction fraction) {
+        Validator.validateFraction(fraction);
         Validator.validateFraction(fraction);
         int newNumerator = this.numerator * fraction.denominator;
         int newDenominator = this.denominator * fraction.numerator;
@@ -154,8 +129,8 @@ public class Fraction implements Fractoions {
         } else {
             return false;
         }
-        return numerator == fraction.numerator &&
-                denominator == fraction.denominator;
+        return this.numerator == fraction.numerator &&
+                this.denominator == fraction.denominator;
     }
 
     @Override
