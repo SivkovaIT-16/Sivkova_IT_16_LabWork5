@@ -9,6 +9,7 @@ public class FractionCache implements Fractions {
     public FractionCache(Fraction fraction) {
         Validator.validateFractionNull(fraction);
         this.fraction = fraction;
+        this.cache = null;
     }
 
     @Override
