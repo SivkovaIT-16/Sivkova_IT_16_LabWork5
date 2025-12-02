@@ -325,24 +325,21 @@ public class Main {
                 }
                 case 7: {
                     List<Point> points = inputPoint();
-                    PointStream pointStream = new PointStream(points);
-                    System.out.println(pointStream);
+                    PointStream.collectPolyline(points);
                     break;
                 }
                 case 8: {
                     try {
                         System.out.println("Обработка файла с корректными и некорректными строками:");
                         File file1 = new File("HumanStream.txt");
-                        HumanStream humanStream1 = new HumanStream(file1);
-                        System.out.println(humanStream1);
+                        HumanStream.collectionHuman(file1);
                     } catch (Exception e) {
                         System.out.println("Ошибка: " + e.getMessage());
                     }
                     try {
                         System.out.println("Обработка файла с только некорректными строками:");
                         File file2 = new File("HumanStreamNotVal.txt");
-                        HumanStream humanStream2 = new HumanStream(file2);
-                        System.out.println(humanStream2);
+                        HumanStream.collectionHuman(file2);
                     } catch (Exception e) {
                         System.out.println("Ошибка: " + e.getMessage());
                     }
@@ -350,7 +347,7 @@ public class Main {
                     try {
                         System.out.println("Попытка создания объекта с файлом null:");
                         File file3 = null;
-                        HumanStream humanStream3 = new HumanStream(file3);
+                        HumanStream.collectionHuman(file3);
                     } catch (Exception e) {
                         System.out.println("Ошибка: " + e.getMessage());
                     }
@@ -358,7 +355,7 @@ public class Main {
                     try {
                         System.out.println("Попытка создания объекта с несуществующим файлом:");
                         File file4 = new File("Human.txt");
-                        HumanStream humanStream4 = new HumanStream(file4);
+                        HumanStream.collectionHuman(file4);
                     } catch (Exception e) {
                         System.out.println("Ошибка: " + e.getMessage());
                     }
@@ -366,7 +363,7 @@ public class Main {
                     try {
                         System.out.println("Попытка создания объекта с пустым файлом:");
                         File file5 = new File("Empty.txt");
-                        HumanStream humanStream5 = new HumanStream(file5);
+                        HumanStream.collectionHuman(file5);
                     } catch (Exception e) {
                         System.out.println("Ошибка: " + e.getMessage());
                     }
@@ -374,7 +371,7 @@ public class Main {
                     try {
                         System.out.println("Попытка создания объекта с указанием директории:");
                         File file6 = new File("D:/IdeaProjects");
-                        HumanStream humanStream6 = new HumanStream(file6);
+                        HumanStream.collectionHuman(file6);
                     } catch (Exception e) {
                         System.out.println(e.getMessage());
                     }

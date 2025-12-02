@@ -8,49 +8,23 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class HumanStream {
-    private File file;
-    private Map<Integer, List<String>> humansStream;
-
-    public File getFile() {
-        return file;
-    }
-
-    public Map<Integer, List<String>> getHumansStream() {
-        return humansStream;
-    }
-
-    public void setFile(File file) {
+    public static void collectionHuman(File file) {
         Validator.valFile(file);
-        this.file = file;
-        this.humansStream = collectionHuman(file);
-    }
-
-    public HumanStream(File file) {
-        Validator.valFile(file);
-        this.file = file;
-        this.humansStream = collectionHuman(file);
-    }
-
-    @Override
-    public String toString() {
-        if (humansStream == null || humansStream.isEmpty()) {
-            return "Нет корректных данных для отображения.";
-        }
-        String str = "Сгруппированные данные:\n";
-        for (Map.Entry<Integer, List<String>> human : humansStream.entrySet()){
-            str += human.getKey() + ": " + human.getValue() + ";\n" ;
-        }
-        return str;
-    }
-
-    private Map<Integer, List<String>> collectionHuman(File file) {
         try {
             Map<Integer, List<String>> result = Files.lines(file.toPath())
                     .filter(str -> str.contains(":"))
                     .map(HumanStream::mapName)
                     .filter(human ->  human != null)
                     .collect(Collectors.groupingBy(Map.Entry::getKey, Collectors.mapping(Map.Entry::getValue, Collectors.toList())));
-            return result;
+            if (result == null || result.isEmpty()) {
+                System.out.println("Нет корректных данных для отображения.");
+                return;
+            }
+            String str = "Сгруппированные данные:\n";
+            for (Map.Entry<Integer, List<String>> human : result.entrySet()){
+                str += human.getKey() + ": " + human.getValue() + ";\n" ;
+            }
+            System.out.println(str);
         } catch (IOException e) {
             throw new RuntimeException("Ошибка чтения файла: " + e.getMessage());
         }
